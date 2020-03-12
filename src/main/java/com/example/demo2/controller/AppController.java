@@ -10,11 +10,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
 
 @Controller
 public class AppController {
@@ -28,11 +27,17 @@ public class AppController {
     }
 
     @PostMapping("/")
-    @ResponseBody
-    public ResponseEntity<Resource> saveFile(Model model, @RequestParam(name = "file") MultipartFile file){
+    public String saveFile(Model model, @RequestParam(name = "file") MultipartFile file){
         DBFile receivedFile = dbFileService.saveFileToDatabase(file);
-        DBFile databaseFile = dbFileService.getFileFromDatabase(receivedFile.getId());
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + receivedFile.getFileName() + "\"").body(new ByteArrayResource(databaseFile.getFileData()));
+
+        return this.get(model);
     }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<Resource> getFile(@PathVariable UUID uid){
+        DBFile dbFile = dbFileService.getFileFromDatabase(uid);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + dbFile.getFileName() + "\"").body(new ByteArrayResource(dbFile.getFileData()));
+    }
+
 }
