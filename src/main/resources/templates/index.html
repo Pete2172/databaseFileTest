@@ -1,0 +1,38 @@
+<html xmlns:th="https://www.thymeleaf.org" xmlns:tr="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Files</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/">
+        <table>
+            <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+        </table>
+    </form>
+</div>
+
+<div>
+    <table border="2">
+        <thead>
+        <tr>
+            <th> UID </th>
+            <th> FileName </th>
+            <th> FileType </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dbfile : ${listDbFiles}">
+            <td><span th:text="${dbfile.id}"> UID </span></td>
+            <td><span th:text="${dbfile.fileName}"> FileName </span></td>
+            <td><span th:text="${dbfile.fileType}"> FileType </span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
