@@ -20,6 +20,9 @@ public class DBFileService {
 
     public DBFile saveFileToDatabase(MultipartFile file){
         try{
+            if(file.getOriginalFilename().isEmpty())
+                throw new RuntimeException();
+
             DBFile newDbFile = new DBFile(file.getOriginalFilename(), file.getContentType(), file.getBytes());
             return dbFileRepository.save(newDbFile);
         }
